@@ -124,6 +124,41 @@ def test_cancel_invoice_exito():
     print("OK test_cancel_invoice_exito")
 
 
+def test_cancel_invoice_convierte_fecha_a_iso():
+    """La API de anulación exige fecha en ISO YYYY-MM-DD. El handler debe
+    convertir desde el formato DD-MM-YYYY que recibe el usuario."""
+    respuesta_fake = {"data": {"items": [{"id": 99}]}}
+    payload_in = {
+        "id_emisor": "B12345674",
+        "num_serie": "2025/001",
+        "fecha": "15-05-2025",
+        "id_registro_anulado": 42,
+    }
+    with patch.object(server.client, "crear_anulacion", return_value=respuesta_fake) as m:
+        r = _run("cancel_invoice", payload_in)
+    assert r["ok"] is True
+    p = m.call_args.args[0]
+    assert p["FechaExpedicionFactura"] == "2025-05-15", (
+        f"Fecha debe convertirse a ISO, llegó: {p['FechaExpedicionFactura']}"
+    )
+
+
+def test_cancel_invoice_fecha_iso_pasa_intacta():
+    """Si el usuario ya pasa la fecha en ISO, no debe doble-convertirse."""
+    respuesta_fake = {"data": {"items": [{"id": 99}]}}
+    payload_in = {
+        "id_emisor": "B12345674",
+        "num_serie": "2025/001",
+        "fecha": "2025-05-15",
+        "id_registro_anulado": 42,
+    }
+    with patch.object(server.client, "crear_anulacion", return_value=respuesta_fake) as m:
+        r = _run("cancel_invoice", payload_in)
+    assert r["ok"] is True
+    p = m.call_args.args[0]
+    assert p["FechaExpedicionFactura"] == "2025-05-15"
+
+
 def test_cancel_invoice_http_error():
     payload_in = {
         "id_emisor": "B12345674",

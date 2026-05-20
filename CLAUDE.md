@@ -51,10 +51,18 @@ Para tests que mockean: usar `patch.object(server.client, "metodo")` o `patch("v
 - **Paginación API en camelCase**: parámetro `perPage`, no `per_page`. Mi tool acepta `per_page` y lo traduce.
 - **Smoke script:** `python smoke_test.py <id_emisor> [nif_receptor]` con `VERIFACTU_API_TOKEN` en env. Pega contra sandbox real, NO contra producción.
 
+## Hallazgos cancel_invoice E2E (2026-05-20)
+
+- **Fecha debe ir ISO `YYYY-MM-DD`** en `/anulacion-registro-facturacion`. El alta acepta `DD-MM-YYYY` lenient, la anulación no. El handler convierte vía `_fecha_a_iso()`.
+- **Identificación del registro a anular**: top-level `IDEmisorFactura` + `NumSerieFactura` + `FechaExpedicionFactura` + `id_registro_anulado` (id interno API).
+- **Sólo anulable si AEAT lo aceptó**: registros con `estado_aeat: "No Registrado"` o `"Rechazado"` no pueden anularse. La factura pasa a `"Correcto"` tras unos segundos del envío (worker async).
+- **Para que AEAT acepte el alta**: en sandbox, las altas con NIF receptor inventado (p.ej. `12345678Z` que no existe en AEAT) acaban en `"No Registrado"`. Las altas F2 (simplificadas, sin destinatario) sí entran como `"Correcto"`.
+- **Anulación de algo ya anulado**: API responde 400 "La factura indicada ya es una anulación".
+
 ## Pendiente real
 
-- **Anulación E2E**: `cancel_invoice` aún no probado contra sandbox real. Probable que necesite ajustes al payload similares a `send_invoice` (TipoFactura, etc).
 - **`get_last_hash` con datos asíncronos**: el GET inicial tras POST devuelve `Huella: null` (procesamiento async server-side). El valor en `data.items[0].Huella` del POST response sí es definitivo y es lo que persistimos.
+- **Tool `send_invoice` solo emite F1**: no expone TipoFactura como parámetro. Para emitir F2 simplificada (sin destinatario obligatorio) hay que añadir el parámetro o crear `send_simple_invoice`.
 
 ## Qué NO hacer
 

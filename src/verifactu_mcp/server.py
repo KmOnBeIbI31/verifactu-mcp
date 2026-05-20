@@ -30,6 +30,22 @@ VERIFACTU_API_TOKEN = os.getenv("VERIFACTU_API_TOKEN", "")
 _DEFAULT_STATE_DB = Path.home() / ".verifactu-mcp" / "state.db"
 
 
+def _fecha_a_iso(fecha: str) -> str:
+    """Convierte DD-MM-YYYY (formato cliente) a YYYY-MM-DD (ISO, formato API).
+
+    Si la fecha ya viene en ISO, se devuelve tal cual.
+    """
+    if not fecha or "-" not in fecha:
+        return fecha
+    partes = fecha.split("-")
+    if len(partes) != 3:
+        return fecha
+    if len(partes[0]) == 4:
+        return fecha
+    dd, mm, yyyy = partes
+    return f"{yyyy}-{mm}-{dd}"
+
+
 def _state_db_path() -> Path:
     override = os.getenv("VERIFACTU_STATE_DB")
     return Path(override) if override else _DEFAULT_STATE_DB
@@ -647,10 +663,11 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
     # ── cancel_invoice ──────────────────────────────────────────────────────
     elif name == "cancel_invoice":
+        # API de anulación exige fecha en formato ISO YYYY-MM-DD
         payload = {
             "IDEmisorFactura": arguments["id_emisor"],
             "NumSerieFactura": arguments["num_serie"],
-            "FechaExpedicionFactura": arguments["fecha"],
+            "FechaExpedicionFactura": _fecha_a_iso(arguments["fecha"]),
             "id_registro_anulado": arguments["id_registro_anulado"],
             "verifactu": True,
         }
