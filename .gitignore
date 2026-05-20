@@ -1,0 +1,56 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# verifactu-mcp runtime state (no debe versionarse)
+*.db
+.verifactu-mcp/
+
+# Claude Code local settings (no debe versionarse)
+.claude/settings.local.json
+
+# Secretos y credenciales (NUNCA versionar)
+.env
+.env.*
+*.env
+secrets/
+*.token
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+auth.json
