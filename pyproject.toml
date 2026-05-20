@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "verifactu-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "MCP server para integrar VeriFactu (AEAT) con Claude Code y Cursor"
 readme = "README.md"
 license = { text = "MIT" }
