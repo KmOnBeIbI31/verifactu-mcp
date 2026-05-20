@@ -1,5 +1,7 @@
 # verifactu-mcp
 
+<!-- mcp-name: io.github.KmOnBeIbI31/verifactu-mcp -->
+
 Servidor MCP para integrar **VeriFactu (AEAT)** con Claude Code y Cursor.
 
 Permite generar, encadenar y enviar registros de facturación electrónica desde

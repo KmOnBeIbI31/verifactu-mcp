@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.KmOnBeIbI31/verifactu-mcp",
+  "description": "MCP server para integrar VeriFactu (AEAT) con Claude Code y Cursor. Genera, encadena, envia, consulta y anula registros de facturacion electronica espanola obligatoria desde lenguaje natural.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/KmOnBeIbI31/verifactu-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "verifactu-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
