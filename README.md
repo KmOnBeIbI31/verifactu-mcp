@@ -139,6 +139,8 @@ Alternativa sin script instalado (vía `python -m`):
 
 Para certificados de prueba (sandbox): `catentidades@correo.aeat.es`
 
+<!-- mcp-name: io.github.KmOnBeIbI31/verifactu-mcp -->
+
 ---
 
 ## Licencia
